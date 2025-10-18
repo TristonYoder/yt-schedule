@@ -37,11 +37,24 @@ cd yt-schedule
 
 # Install the package
 pip3 install -e .
+```
 
-# Add to PATH if needed (add this to your ~/.zshrc or ~/.bashrc)
+**Make the command available permanently:**
+
+Add this line to your `~/.zshrc` (or `~/.bashrc` if using bash):
+
+```bash
 export PATH="$HOME/Library/Python/3.9/bin:$PATH"
+```
 
-# Now you can run from anywhere
+Then reload your shell:
+```bash
+source ~/.zshrc
+```
+
+Or simply open a new terminal window. Now you can run from anywhere:
+
+```bash
 yt-schedule --help
 ```
 
