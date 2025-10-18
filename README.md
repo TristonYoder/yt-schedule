@@ -27,15 +27,35 @@ Services A-H can be configured with custom names, schedules, and stream keys. By
 
 All service times and names are configurable via the `.env` file.
 
-## Setup
+## Installation
 
-1. **Install Dependencies**
+### Option 1: Install as Command (Recommended)
 
 ```bash
-pip install -r requirements.txt
+# Clone or download the repository
+cd yt-schedule
+
+# Install the package
+pip3 install -e .
+
+# Add to PATH if needed (add this to your ~/.zshrc or ~/.bashrc)
+export PATH="$HOME/Library/Python/3.9/bin:$PATH"
+
+# Now you can run from anywhere
+yt-schedule --help
 ```
 
-2. **Configure Environment**
+### Option 2: Run Directly
+
+```bash
+cd yt-schedule
+pip3 install -r requirements.txt
+python3 main.py --help
+```
+
+## Setup
+
+1. **Configure Environment**
 
 Copy `env.example` to `.env` and update with your settings:
 
@@ -49,7 +69,7 @@ Edit `.env` with your:
 - Enabled services
 - Stream key mappings
 
-3. **Set up YouTube API Credentials**
+2. **Set up YouTube API Credentials**
 
 - Go to [Google Cloud Console](https://console.cloud.google.com/)
 - Create a project and enable YouTube Data API v3
@@ -69,7 +89,7 @@ Edit `.env` with your:
 Schedule the next occurrence of each enabled service:
 
 ```bash
-python main.py
+yt-schedule
 ```
 
 This will:
@@ -173,6 +193,11 @@ This means:
 ENABLED_SERVICES=A,B,C,D,E
 ```
 
+Then run:
+```bash
+yt-schedule
+```
+
 ### Schedule an Entire Month
 
 ```env
@@ -181,11 +206,15 @@ START_DATE=2025-02-01
 END_DATE=2025-02-28
 ```
 
+Then run:
+```bash
+yt-schedule
+```
+
 ### Test Configuration
 
-```env
-ENABLED_SERVICES=A
-DRY_RUN=true
+```bash
+yt-schedule -w 1 --dry-run
 ```
 
 ## Troubleshooting
