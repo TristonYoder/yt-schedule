@@ -41,18 +41,35 @@ pip3 install -e .
 
 **Make the command available permanently:**
 
+**For Nix Home Manager users:**
+
+Add this to your Home Manager configuration (`home.nix`):
+
+```nix
+home.sessionPath = [
+  "$HOME/Library/Python/3.9/bin"
+];
+```
+
+Then rebuild:
+```bash
+home-manager switch
+```
+
+**For standard shell users:**
+
 Add this line to your `~/.zshrc` (or `~/.bashrc` if using bash):
 
 ```bash
 export PATH="$HOME/Library/Python/3.9/bin:$PATH"
 ```
 
-Then reload your shell:
+Then reload:
 ```bash
 source ~/.zshrc
 ```
 
-Or simply open a new terminal window. Now you can run from anywhere:
+Now you can run from anywhere:
 
 ```bash
 yt-schedule --help
