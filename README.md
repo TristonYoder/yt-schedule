@@ -139,34 +139,37 @@ yt-schedule
 
 This creates broadcasts for the next Saturday, Sunday, or Wednesday (depending on service configuration) and adds them to the specified playlist.
 
-### Date Range Deployment
+### Week Range Deployment (Recommended)
 
-Schedule multiple occurrences across a date range:
+Schedule multiple weeks of services using the `-w` or `--weeks` flag:
 
-1. Configure date range in `.env`:
+```bash
+yt-schedule -w 4
+```
+
+This schedules all enabled services for the next 4 weeks from today.
+
+Examples:
+- `yt-schedule -w 1` - Schedule 1 week
+- `yt-schedule -w 12` - Schedule 3 months (12 weeks)
+- `yt-schedule -w 52` - Schedule a full year
+
+### Custom Date Range (Advanced)
+
+For specific date ranges, configure `.env`:
 
 ```env
 START_DATE=2025-01-01
 END_DATE=2025-01-31
 ```
 
-2. Run the scheduler:
+Then run:
 
 ```bash
 yt-schedule
 ```
 
-The tool will create broadcasts for all enabled services within the specified date range.
-
-### Custom Week Range
-
-Schedule a specific number of weeks ahead:
-
-```bash
-yt-schedule -w 4
-```
-
-This schedules services for the next 4 weeks.
+This creates broadcasts for all enabled services within the specified date range. **Note**: The `-w` flag takes precedence over `.env` date settings.
 
 ### Preview Mode (Dry Run)
 
@@ -198,20 +201,18 @@ Run the scheduler:
 yt-schedule
 ```
 
-### Schedule an Entire Month
+### Schedule Multiple Weeks
 
 Configure `.env`:
 
 ```env
 ENABLED_SERVICES=A,B,C,D,E,F
-START_DATE=2025-02-01
-END_DATE=2025-02-28
 ```
 
-Run the scheduler:
+Schedule 4 weeks of services:
 
 ```bash
-yt-schedule
+yt-schedule -w 4
 ```
 
 ### Test Configuration
