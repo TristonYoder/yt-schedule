@@ -71,7 +71,7 @@ Edit `OAuth2.json` with your actual OAuth 2.0 credentials from Google Cloud Cons
 
 ### 3. Configure Environment Variables
 
-Copy the example environment file:
+The `.env` file will be automatically created from `env.example` on first run. Alternatively, you can create it manually:
 
 ```bash
 cp env.example .env

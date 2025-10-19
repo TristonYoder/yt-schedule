@@ -2,6 +2,7 @@ import os
 import sys
 import logging
 import argparse
+import shutil
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 from dataclasses import dataclass
@@ -20,6 +21,24 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# Auto-create .env from env.example if it doesn't exist
+def ensure_env_file():
+    """Create .env from env.example if it doesn't exist"""
+    env_file = '.env'
+    env_example = 'env.example'
+    
+    if not os.path.exists(env_file):
+        if os.path.exists(env_example):
+            shutil.copy(env_example, env_file)
+            logger.info(f"Created {env_file} from {env_example}")
+            logger.info(f"Please edit {env_file} with your configuration before running again")
+            sys.exit(0)
+        else:
+            logger.error(f"Neither {env_file} nor {env_example} found")
+            sys.exit(1)
+
+ensure_env_file()
 
 # Load environment variables
 load_dotenv()
