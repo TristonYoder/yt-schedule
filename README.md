@@ -265,14 +265,8 @@ Default service configurations (all times and names are customizable):
 
 - Verify `TIMEZONE` setting matches your location
 - Check service time configuration in `.env` uses 24-hour format
-- Confirm `SERVICE_X_TIME` values are in `HH:MM` format
+- Confirm `SERVICE_X_TIME` values are in `HH:MM` format (ie: 4pm == 16:00)
 
 ### Configuration Errors
 
 - Verify all required environment variables are set in `.env`
-- Check `ENABLED_SERVICES` only includes services that are fully configured
-- Ensure date format is `YYYY-MM-DD` for `START_DATE` and `END_DATE`
-
-## License
-
-This tool is for internal use managing church service streams.
