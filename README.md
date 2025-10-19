@@ -39,9 +39,11 @@ pip3 install -r requirements.txt
 pip3 install -e .
 ```
 
-4. **Add to system PATH** (optional, for global access)
+4. **Add to system PATH**
 
-Add this line to `~/.zshrc` (or `~/.bashrc`):
+To use the `yt-schedule` command from anywhere, add the Python bin directory to your PATH.
+
+Add this line to `~/.zshrc` (or `~/.bashrc` if using bash):
 
 ```bash
 export PATH="$HOME/Library/Python/3.9/bin:$PATH"
@@ -58,6 +60,8 @@ Verify installation:
 ```bash
 yt-schedule --help
 ```
+
+**Note**: If you skip this step, you can still use the tool by running `python3 main.py` from the project directory instead of `yt-schedule`.
 
 ## Configuration
 
