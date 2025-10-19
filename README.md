@@ -129,8 +129,7 @@ Subsequent runs will use the saved credentials automatically. Credentials refres
 
 ## Deployment
 
-### Basic Deployment (Next Occurrence)
-
+### Basic Usage
 Schedule the next occurrence of each enabled service:
 
 ```bash
@@ -139,7 +138,7 @@ yt-schedule
 
 This creates broadcasts for the next Saturday, Sunday, or Wednesday (depending on service configuration) and adds them to the specified playlist.
 
-### Week Range Deployment (Recommended)
+### Week Range Deployment
 
 Schedule multiple weeks of services using the `-w` or `--weeks` flag:
 
@@ -153,23 +152,6 @@ Examples:
 - `yt-schedule -w 1` - Schedule 1 week
 - `yt-schedule -w 12` - Schedule 3 months (12 weeks)
 - `yt-schedule -w 52` - Schedule a full year
-
-### Custom Date Range (Advanced)
-
-For specific date ranges, configure `.env`:
-
-```env
-START_DATE=2025-01-01
-END_DATE=2025-01-31
-```
-
-Then run:
-
-```bash
-yt-schedule
-```
-
-This creates broadcasts for all enabled services within the specified date range. **Note**: The `-w` flag takes precedence over `.env` date settings.
 
 ### Preview Mode (Dry Run)
 
