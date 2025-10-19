@@ -73,6 +73,7 @@ class YouTubeStreamScheduler:
         self.timezone = ZoneInfo(os.getenv('TIMEZONE', 'America/Indianapolis'))
         self.privacy_status = os.getenv('PRIVACY_STATUS', 'unlisted')
         self.made_for_kids = os.getenv('MADE_FOR_KIDS', 'false').lower() == 'true'
+        self.auto_start = os.getenv('AUTO_START', 'true').lower() == 'true'
         self.dry_run = os.getenv('DRY_RUN', 'false').lower() == 'true'
         
         # Parse enabled services
@@ -341,11 +342,12 @@ class YouTubeStreamScheduler:
                 logger.info(f"  Time: {scheduled_time_iso}")
                 logger.info(f"  Stream: {stream.get('snippet', {}).get('title', 'Unknown')}")
                 logger.info(f"  Description: {service.description or 'No description'}")
+                logger.info(f"  Auto-start: {self.auto_start}")
                 return None
             
             # Create live broadcast
             live_broadcast = self.youtube.liveBroadcasts().insert(
-                part="snippet,status",
+                part="snippet,status,contentDetails",
                 body={
                     "snippet": {
                         "title": stream_title,
@@ -356,6 +358,9 @@ class YouTubeStreamScheduler:
                     "status": {
                         "privacyStatus": self.privacy_status,
                         "selfDeclaredMadeForKids": self.made_for_kids,
+                    },
+                    "contentDetails": {
+                        "enableAutoStart": self.auto_start,
                     }
                 }
             ).execute()
