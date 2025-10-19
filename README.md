@@ -100,6 +100,9 @@ Configure each service (A-H) with the following variables:
 - `TIMEZONE`: Timezone for service times (default: `America/Indianapolis`)
 - `PRIVACY_STATUS`: Broadcast privacy: `unlisted`, `private`, or `public` (default: `unlisted`)
 - `AUTO_START`: Automatically start broadcast at scheduled time: `true` or `false` (default: `true`)
+- `AUTO_STOP`: Automatically stop broadcast when stream ends: `true` or `false` (default: `true`)
+- `ENABLE_DVR`: Enable DVR functionality for viewers: `true` or `false` (default: `true`)
+- `ENABLE_360`: Enable 360° video mode: `true` or `false` (default: `false`)
 - `DRY_RUN`: Enable preview mode: `true` or `false` (default: `false`)
 
 ### 4. Configure YouTube Stream Keys

@@ -74,6 +74,9 @@ class YouTubeStreamScheduler:
         self.privacy_status = os.getenv('PRIVACY_STATUS', 'unlisted')
         self.made_for_kids = os.getenv('MADE_FOR_KIDS', 'false').lower() == 'true'
         self.auto_start = os.getenv('AUTO_START', 'true').lower() == 'true'
+        self.auto_stop = os.getenv('AUTO_STOP', 'true').lower() == 'true'
+        self.enable_dvr = os.getenv('ENABLE_DVR', 'true').lower() == 'true'
+        self.enable_360 = os.getenv('ENABLE_360', 'false').lower() == 'true'
         self.dry_run = os.getenv('DRY_RUN', 'false').lower() == 'true'
         
         # Parse enabled services
@@ -343,6 +346,9 @@ class YouTubeStreamScheduler:
                 logger.info(f"  Stream: {stream.get('snippet', {}).get('title', 'Unknown')}")
                 logger.info(f"  Description: {service.description or 'No description'}")
                 logger.info(f"  Auto-start: {self.auto_start}")
+                logger.info(f"  Auto-stop: {self.auto_stop}")
+                logger.info(f"  DVR enabled: {self.enable_dvr}")
+                logger.info(f"  360° video: {self.enable_360}")
                 return None
             
             # Create live broadcast
@@ -361,6 +367,9 @@ class YouTubeStreamScheduler:
                     },
                     "contentDetails": {
                         "enableAutoStart": self.auto_start,
+                        "enableAutoStop": self.auto_stop,
+                        "enableDvr": self.enable_dvr,
+                        "projection": "360" if self.enable_360 else "rectangular",
                     }
                 }
             ).execute()
