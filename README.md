@@ -99,8 +99,6 @@ Configure each service (A-H) with the following variables:
 
 - `TIMEZONE`: Timezone for service times (default: `America/Indianapolis`)
 - `PRIVACY_STATUS`: Broadcast privacy: `unlisted`, `private`, or `public` (default: `unlisted`)
-- `START_DATE`: Start date for range mode (format: `YYYY-MM-DD`)
-- `END_DATE`: End date for range mode (format: `YYYY-MM-DD`)
 - `DRY_RUN`: Enable preview mode: `true` or `false` (default: `false`)
 
 ### 4. Configure YouTube Stream Keys
@@ -167,6 +165,31 @@ Or configure in `.env`:
 DRY_RUN=true
 ```
 
+### Remove Scheduled Broadcasts
+
+Remove all upcoming/scheduled broadcasts:
+
+```bash
+yt-schedule --remove
+```
+
+Or use the shorthand:
+
+```bash
+yt-schedule -rm
+```
+
+Preview what would be removed without deleting:
+
+```bash
+yt-schedule --remove --dry-run
+```
+
+This is useful for:
+- Clearing out old scheduled broadcasts before rescheduling
+- Removing broadcasts that need to be rescheduled
+- Cleaning up test broadcasts
+
 ## Usage Examples
 
 ### Schedule Weekend Services Only
@@ -215,8 +238,10 @@ Default service configurations (all times and names are customizable):
 - **Service D**: Sunday 9:30am Service
 - **Service E**: Sunday 11:15am Service
 - **Service F**: Wednesday 7:00pm Service
-- **Service G**: Special events (no default schedule)
-- **Service H**: Miscellaneous events (no default schedule)
+- **Service G**: Available for additional services (requires schedule configuration)
+- **Service H**: Available for additional services (requires schedule configuration)
+
+**Note**: All services must have a schedule configured (DAY and TIME). To use a service, set the appropriate environment variables in `.env`.
 
 ## Troubleshooting
 

@@ -63,17 +63,17 @@ class YouTubeStreamScheduler:
         # Load service configurations from environment
         self.services = self._load_service_configs()
         
-        # Handle date range - command line weeks takes precedence over .env
+        # Handle weeks parameter
         if weeks is not None and weeks > 0:
             # Calculate date range from weeks argument
             now = datetime.now(self.timezone)
             self.start_date = now.replace(hour=0, minute=0, second=0, microsecond=0)
             self.end_date = self.start_date + timedelta(weeks=weeks)
-            logger.info(f"Using command-line weeks argument: {weeks} weeks")
+            logger.info(f"Scheduling {weeks} week(s) of services")
         else:
-            # Parse optional date range from .env
-            self.start_date = self._parse_date(os.getenv('START_DATE'))
-            self.end_date = self._parse_date(os.getenv('END_DATE'))
+            # No weeks specified, schedule next occurrence only
+            self.start_date = None
+            self.end_date = None
         
         self.youtube = None
         self.existing_streams = []
@@ -120,16 +120,6 @@ class YouTubeStreamScheduler:
             )
         
         return services
-        
-    def _parse_date(self, date_str: Optional[str]) -> Optional[datetime]:
-        """Parse date string in YYYY-MM-DD format"""
-        if not date_str or not date_str.strip():
-            return None
-        try:
-            return datetime.strptime(date_str.strip(), '%Y-%m-%d').replace(tzinfo=self.timezone)
-        except ValueError:
-            logger.error(f"Invalid date format: {date_str}. Expected YYYY-MM-DD")
-            return None
     
     def validate_config(self) -> bool:
         """Validate required configuration"""
@@ -155,10 +145,9 @@ class YouTubeStreamScheduler:
                 errors.append(f"Service {service_id} is not configured. Need SERVICE_{service_id}_NAME")
             else:
                 service = self.services[service_id]
-                # Check if service has schedule (not required for special events in date range mode)
+                # All services must have a schedule configured
                 if service.day_of_week is None or service.time_hour is None:
-                    if not (self.start_date and self.end_date):
-                        errors.append(f"Service {service_id} has no schedule configured and no date range specified")
+                    errors.append(f"Service {service_id} ({service.name}) has no schedule configured. Set SERVICE_{service_id}_DAY and SERVICE_{service_id}_TIME")
         
         if errors:
             for error in errors:
@@ -277,22 +266,16 @@ class YouTubeStreamScheduler:
         return next_datetime
     
     def get_service_dates(self, service_id: str) -> List[datetime]:
-        """Get list of dates for a service based on mode (auto or date range)"""
+        """Get list of dates for a service based on weeks parameter"""
         if service_id not in self.services:
             logger.warning(f"Service {service_id} is not configured")
             return []
         
         service = self.services[service_id]
-        
-        # Check if service has a schedule
-        if service.day_of_week is None or service.time_hour is None or service.time_minute is None:
-            logger.warning(f"Service {service_id} ({service.name}) has no schedule configured (special event only)")
-            return []
-
         dates = []
         
         if self.start_date and self.end_date:
-            # Date range mode: find all occurrences within range
+            # Week range mode: find all occurrences within range
             current = self.start_date
             while current <= self.end_date:
                 if current.weekday() == service.day_of_week:
@@ -306,7 +289,7 @@ class YouTubeStreamScheduler:
                         dates.append(service_time)
                 current += timedelta(days=1)
         else:
-            # Auto mode: next occurrence only
+            # Default mode: next occurrence only
             next_date = self.calculate_next_occurrence(
                 service.day_of_week,
                 service.time_hour,
@@ -469,9 +452,9 @@ class YouTubeStreamScheduler:
         
         # Determine mode
         if self.start_date and self.end_date:
-            logger.info(f"Running in DATE RANGE mode: {self.start_date.date()} to {self.end_date.date()}")
+            logger.info(f"Scheduling services from {self.start_date.date()} to {self.end_date.date()}")
         else:
-            logger.info("Running in AUTO mode: scheduling next occurrence of each service")
+            logger.info("Scheduling next occurrence of each service")
         
         # Process each enabled service
         total_created = 0
@@ -522,7 +505,7 @@ Examples:
         '-w', '--weeks',
         type=int,
         metavar='N',
-        help='Number of weeks to schedule (overrides START_DATE/END_DATE from .env)'
+        help='Number of weeks to schedule'
     )
     
     parser.add_argument(
